@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // Changed from bcrypt to bcryptjs
 const User = require('../models/User');
 
 // Signup
@@ -10,7 +10,7 @@ router.post('/signup', async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already exists' });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); // Same API
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid email or password' });
 
-    const valid = await bcrypt.compare(password, user.password);
+    const valid = await bcrypt.compare(password, user.password); // Same API
     if (!valid) return res.status(400).json({ message: 'Invalid email or password' });
 
     res.status(200).json({ message: 'Login successful' });

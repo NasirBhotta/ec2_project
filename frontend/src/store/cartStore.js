@@ -2,11 +2,38 @@ import { create } from "zustand";
 import { useAuthStore } from "./authStore";
 
 export const useCartStore = create((set, get) => ({
-  cart: useAuthStore.getState().user?.cart || [],
+  cart: [],
 
-  syncCartWithUser: (cart) => {
-    const auth = useAuthStore.getState();
-    auth.updateCart(cart);
+  // Initialize cart from backend for logged-in user
+  fetchCart: async () => {
+    const user = useAuthStore.getState().user;
+    if (!user?.email) return;
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/cart?email=${user.email}`);
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+      set({ cart: data.cart || [] });
+    } catch (err) {
+      console.error("fetchCart error:", err);
+    }
+  },
+
+  syncCartWithBackend: async (cart) => {
+    const user = useAuthStore.getState().user;
+    if (!user?.email) return;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email, cart }),
+      });
+      if (!res.ok) throw new Error("Failed to update cart");
+      set({ cart });
+    } catch (err) {
+      console.error("syncCartWithBackend error:", err);
+    }
   },
 
   addToCart: (product) => {
@@ -24,7 +51,7 @@ export const useCartStore = create((set, get) => ({
         updatedCart = [...state.cart, { ...product, quantity: 1 }];
       }
 
-      get().syncCartWithUser(updatedCart);
+      get().syncCartWithBackend(updatedCart);
       return { cart: updatedCart };
     });
   },
@@ -34,7 +61,7 @@ export const useCartStore = create((set, get) => ({
       const updatedCart = state.cart.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       );
-      get().syncCartWithUser(updatedCart);
+      get().syncCartWithBackend(updatedCart);
       return { cart: updatedCart };
     });
   },
@@ -46,7 +73,7 @@ export const useCartStore = create((set, get) => ({
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0);
-      get().syncCartWithUser(updatedCart);
+      get().syncCartWithBackend(updatedCart);
       return { cart: updatedCart };
     });
   },
@@ -54,7 +81,7 @@ export const useCartStore = create((set, get) => ({
   removeItem: (id) => {
     set((state) => {
       const updatedCart = state.cart.filter((item) => item.id !== id);
-      get().syncCartWithUser(updatedCart);
+      get().syncCartWithBackend(updatedCart);
       return { cart: updatedCart };
     });
   },
