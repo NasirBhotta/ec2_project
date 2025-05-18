@@ -1,0 +1,17 @@
+version: "3"
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8081:80"         # Frontend now on 8081
+    restart: always
+    container_name: frontend_jenkins
+
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5000"       # Backend now on 5001
+    env_file:
+      - ./backend/.env
+    restart: always
+    container_name: backend_jenkins
