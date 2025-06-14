@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // Changed from bcrypt to bcryptjs
 const User = require('../models/User');
+// Health check route
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'Server is up and running!' });
+});
 
 // Signup
 router.post('/signup', async (req, res) => {
