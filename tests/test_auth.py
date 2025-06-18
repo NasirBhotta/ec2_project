@@ -16,7 +16,7 @@ driver = webdriver.Chrome(options=options)
 wait = WebDriverWait(driver, 10)
 
 # --- Jenkins Deployed App URL ---
-BASE_URL = "http://16.171.182.63/"
+BASE_URL = "http://16.171.182.63"
 
 # --- Dynamic Test Data ---
 random_int = random.randint(1000, 9999)
@@ -30,11 +30,11 @@ test_name = f"User{random_int}"
 
 def test_signup_valid():
     driver.get(f"{BASE_URL}/signup")
-    wait.until(EC.presence_of_element_located((By.NAME, "name")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[type='text']")))
 
-    driver.find_element(By.NAME, "name").send_keys(test_name)
-    driver.find_element(By.NAME, "email").send_keys(test_email)
-    driver.find_element(By.NAME, "password").send_keys(test_password)
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Name']").send_keys(test_name)
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys(test_email)
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Password']").send_keys(test_password)
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
     wait.until(lambda d: "/login" in d.current_url or "login" in d.page_source.lower())
@@ -42,11 +42,11 @@ def test_signup_valid():
 
 def test_signup_invalid_email():
     driver.get(f"{BASE_URL}/signup")
-    wait.until(EC.presence_of_element_located((By.NAME, "email")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email']")))
 
-    driver.find_element(By.NAME, "name").send_keys("Fake User")
-    driver.find_element(By.NAME, "email").send_keys("notanemail")
-    driver.find_element(By.NAME, "password").send_keys("pass123")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Name']").send_keys("Fake User")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys("notanemail")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Password']").send_keys("pass123")
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
     time.sleep(2)
@@ -55,10 +55,10 @@ def test_signup_invalid_email():
 
 def test_signup_missing_fields():
     driver.get(f"{BASE_URL}/signup")
-    wait.until(EC.presence_of_element_located((By.NAME, "email")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email']")))
 
-    driver.find_element(By.NAME, "email").send_keys("")
-    driver.find_element(By.NAME, "password").send_keys("")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys("")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Password']").send_keys("")
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
     time.sleep(2)
@@ -71,10 +71,10 @@ def test_signup_missing_fields():
 
 def test_login_valid():
     driver.get(f"{BASE_URL}/login")
-    wait.until(EC.presence_of_element_located((By.NAME, "email")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email']")))
 
-    driver.find_element(By.NAME, "email").send_keys(test_email)
-    driver.find_element(By.NAME, "password").send_keys(test_password)
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys(test_email)
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Password']").send_keys(test_password)
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
     wait.until(lambda d: "logout" in d.page_source.lower() or "dashboard" in d.page_source.lower())
@@ -82,10 +82,10 @@ def test_login_valid():
 
 def test_login_invalid():
     driver.get(f"{BASE_URL}/login")
-    wait.until(EC.presence_of_element_located((By.NAME, "email")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email']")))
 
-    driver.find_element(By.NAME, "email").send_keys("wrong@email.com")
-    driver.find_element(By.NAME, "password").send_keys("Wrong123")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys("wrong@email.com")
+    driver.find_element(By.CSS_SELECTOR, "input[placeholder='Password']").send_keys("Wrong123")
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
     time.sleep(2)
