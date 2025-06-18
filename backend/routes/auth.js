@@ -3,6 +3,10 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+// Health check route
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'Server is up and running!' });
+});
 
 
 router.post('/signup', async (req, res) => {
