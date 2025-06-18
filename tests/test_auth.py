@@ -16,7 +16,7 @@ driver = webdriver.Chrome(options=options)
 wait = WebDriverWait(driver, 10)
 
 # --- Jenkins Deployed App URL ---
-BASE_URL = "http://13.60.18.224:8081"
+BASE_URL = "http://16.171.182.63/"
 
 # --- Dynamic Test Data ---
 random_int = random.randint(1000, 9999)
