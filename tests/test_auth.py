@@ -30,7 +30,7 @@ test_name = f"User{random_int}"
 
 def test_signup_valid():
     driver.get(f"{BASE_URL}/signup")
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[type='text']")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email']")))
 
     driver.find_element(By.CSS_SELECTOR, "input[placeholder='Name']").send_keys(test_name)
     driver.find_element(By.CSS_SELECTOR, "input[placeholder='Email']").send_keys(test_email)
