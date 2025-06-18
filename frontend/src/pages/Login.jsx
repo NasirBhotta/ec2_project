@@ -45,6 +45,7 @@ function Login() {
         <div className="space-y-4">
           <div>
             <input
+              name="email"
               type="email"
               placeholder="Email"
               value={email}
@@ -55,6 +56,7 @@ function Login() {
           </div>
           <div>
             <input
+              name="password"
               type="password"
               placeholder="Password"
               value={password}

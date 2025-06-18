@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); // Optional: if backend supports a name field
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -45,6 +45,7 @@ function Signup() {
         <div className="space-y-4">
           <div>
             <input
+              name="name"
               type="text"
               placeholder="Name"
               value={name}
@@ -55,6 +56,7 @@ function Signup() {
           </div>
           <div>
             <input
+              name="email"
               type="email"
               placeholder="Email"
               value={email}
@@ -65,6 +67,7 @@ function Signup() {
           </div>
           <div>
             <input
+              name="password"
               type="password"
               placeholder="Password"
               value={password}
